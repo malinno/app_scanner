@@ -93,8 +93,4 @@ src/
 - Fork, tạo branch mới, pull request như các dự án open source chuẩn.
 - Mọi ý kiến đóng góp, bug report đều được hoan nghênh!
 
----
-
-## Liên hệ
-- Dev: [Tên bạn hoặc team]
-- Email: [email liên hệ]
+--
