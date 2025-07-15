@@ -1,79 +1,100 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# App Scanner - React Native
 
-# Getting Started
+## Giới thiệu
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+**App Scanner** là ứng dụng di động được phát triển bằng React Native, mục đích chính là quét mã vạch (barcode) và kết nối trực tiếp với các thiết bị máy quét Zebra (DataWedge). Ứng dụng hỗ trợ quản lý đăng nhập, phân quyền, giao diện hiện đại với Tailwind (nativewind), và có thể mở rộng cho nhiều nghiệp vụ khác.
 
-## Step 1: Start the Metro Server
+- **Nền tảng:** React Native (TypeScript)
+- **Quản lý state:** Zustand, React Query
+- **Giao diện:** Tailwind (nativewind)
+- **API:** Axios + Interceptor
+- **Máy quét:** Tích hợp DataWedge cho Zebra
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+## Mục đích dự án
+- Quét mã vạch nhanh chóng, ổn định trên thiết bị Zebra
+- Quản lý user, phân quyền (admin, user, ...)
+- Giao diện đẹp, dễ mở rộng, dễ bảo trì
+- Dễ dàng tích hợp thêm các nghiệp vụ khác
 
-To start Metro, run the following command from the _root_ of your React Native project:
+---
+
+## Cài đặt & Chạy dự án
+
+### 1. Cài đặt dependencies
 
 ```bash
-# using npm
+npm install
+```
+
+### 2. Chạy Metro Bundler
+```bash
 npm start
-
-# OR using Yarn
-yarn start
 ```
 
-## Step 2: Start your Application
+### 3. Chạy app trên thiết bị/simulator
+- **Android:**
+  ```bash
+  npm run android
+  ```
+- **iOS:**
+  ```bash
+  npm run ios
+  ```
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+> **Lưu ý:**
+> - Đảm bảo đã cài đặt môi trường React Native theo [hướng dẫn chính thức](https://reactnative.dev/docs/environment-setup).
+> - Để sử dụng DataWedge trên máy Zebra, cần cấp quyền và cấu hình intent phù hợp.
 
-### For Android
+---
 
-```bash
-# using npm
-npm run android
+## Cấu trúc thư mục
 
-# OR using Yarn
-yarn android
+```
+src/
+  components/      # Các component tái sử dụng (Button, Alert, Loading, ...)
+  screens/         # Các màn hình (Login, Home, Profile, ...)
+  navigation/      # Điều hướng (AppNavigator, Stack, ...)
+  services/        # Logic gọi API (auth, user, ...)
+  store/           # State management (zustand)
+  hooks/           # Custom hooks
+  utils/           # Hàm tiện ích, validate, token, ...
+  types/           # Type/interface dùng chung
+  assets/          # Ảnh, font, icon, ...
+  constants/       # Hằng số, config
 ```
 
-### For iOS
+---
 
-```bash
-# using npm
-npm run ios
+## Công nghệ sử dụng
+- React Native (TypeScript)
+- Zustand, React Query
+- Nativewind (Tailwind cho React Native)
+- Axios (API, Interceptor)
+- DataWedge (Zebra)
+- ESLint, Prettier (format code)
 
-# OR using Yarn
-yarn ios
-```
+---
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+## Format code & Quy tắc code
+- Sử dụng Prettier, ESLint để format/lint code tự động.
+- Đã cấu hình sẵn `.prettierrc`, `.eslintrc.js`, `.editorconfig`, ...
+- VSCode: nên cài extension Prettier, ESLint và bật formatOnSave.
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+---
 
-## Step 3: Modifying your App
+## Lưu ý khi dùng với máy Zebra
+- Đảm bảo app đã được cấp quyền nhận intent từ DataWedge.
+- Có thể cần cấu hình intent action/category trong DataWedge profile trên máy Zebra.
+- Tham khảo thêm tài liệu: [DataWedge Intent API](https://techdocs.zebra.com/datawedge/latest/guide/api/)
 
-Now that you have successfully run the app, let's modify it.
+---
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+## Đóng góp & Phát triển
+- Fork, tạo branch mới, pull request như các dự án open source chuẩn.
+- Mọi ý kiến đóng góp, bug report đều được hoan nghênh!
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+---
 
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+## Liên hệ
+- Dev: [Tên bạn hoặc team]
+- Email: [email liên hệ]
