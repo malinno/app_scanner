@@ -1,118 +1,75 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
   Text,
-  useColorScheme,
-  View,
+  StyleSheet,
+  DeviceEventEmitter,
+  Platform,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+// @ts-ignore vì thư viện không có file .d.ts
+import DataWedgeIntents from 'react-native-datawedge-intents';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+export default function App() {
+  const [barcode, setBarcode] = useState('');
 
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+  useEffect(() => {
+    const subscription = DeviceEventEmitter.addListener(
+      'datawedge_broadcast_intent',
+      (intent) => {
+        console.log('📥 Đã nhận intent:', intent);
 
-function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+        const data =
+          intent['com.symbol.datawedge.data_string'] ||
+          intent['com.motorolasolutions.datawedge.data_string'] ||
+          intent['data_string'];
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+        if (data) {
+          const cleaned = data.trim();
+          setBarcode(cleaned);
+          console.log('✅ Mã quét:', cleaned);
+        } else {
+          console.log('⚠️ Không tìm thấy mã quét trong intent.');
+        }
+      }
+    );
+
+    if (Platform.OS === 'android') {
+      DataWedgeIntents.registerBroadcastReceiver({
+        filterActions: ['com.zebra.reactnative.ACTION'],
+        filterCategories: ['android.intent.category.DEFAULT'],
+      });
+    }
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>📦 Kết quả quét:</Text>
+      <Text style={[styles.barcode, { color: barcode ? 'green' : 'gray' }]}>
+        {barcode || 'Chưa có mã'}
+      </Text>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
   },
-  sectionTitle: {
-    fontSize: 24,
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 12,
+  },
+  barcode: {
+    fontSize: 28,
     fontWeight: '600',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
 });
-
-export default App;

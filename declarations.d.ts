@@ -1,0 +1,1 @@
+declare module '@edritech93/react-native-datawedge-intents';
